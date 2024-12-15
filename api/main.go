@@ -1,25 +1,64 @@
 package main
 
 import (
-    "fmt"
+	"Todo-api-Golang/api/docs"
+	middleware "Todo-api-Golang/api/middlewares"
+	"Todo-api-Golang/infrastructure/persistence/db"
+	"Todo-api-Golang/infrastructure/utility"
+	"log"
+
+	_ "Todo-api-Golang/api/docs"
+	"Todo-api-Golang/core/application/features"
+
+	"github.com/gin-gonic/gin"
+	"github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
+// @title Todo API
+// @version 1.0
+// @description This is a simple API developed with Golang
+// @termsOfService http://swagger.io/terms/
+// @contact.name API Support
+// @contact.url http://www.swagger.io/support
+// @contact.email support@swagger.io
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+// @host localhost:10000
+// @BasePath /api/v1
+
+// @securityDefinitions.basic BasicAuth
+// @externalDocs.description OpenAPI
+// @externalDocs.url https://swagger.io/resources/open-api/
 func main() {
-    var thing1 = [5]float64{1,2,3,4,5}
-    fmt.Printf("\nThe memory location of the thing1 array is: %p", &thing1)
-    
-    var result [5]float64 = square(&thing1)
-    fmt.Printf("\nthe result is: %v", result)
-    fmt.Printf("\nThe value of thing1 is: %v\n", thing1)
 
-}
+	docs.SwaggerInfo.Title = "Todo API"
+	docs.SwaggerInfo.Description = "This is a simple API developed with Golang"
+	docs.SwaggerInfo.Version = "1.0"
+	docs.SwaggerInfo.Host = "localhost:10000"
+	docs.SwaggerInfo.BasePath = "/v1"
+	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 
-func square(thing2 *[5]float64) [5]float64 {
+	utility.LoadingEnv()
 
-    fmt.Printf("\nThe memory location of the thing2 array is: %p", thing2)
-    for i := range thing2 {
-        thing2[i] = thing2[i]*thing2[i]
-    }
+	db, err := db.ConnectGormDB()
+	if err != nil {
+		log.Println("Connection error.")
+		return
+	}
 
-    return *thing2
+	router := gin.Default()
+
+	// Use the DB middleware for all routes
+	router.Use(middleware.DBMiddleware(db))
+
+	// Swagger UI route
+	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	// API routes
+	router.GET("/todos/", features.GetTodos)   // Get all todos
+	router.POST("/todos/", features.AddTodo)  // Add a new todo
+
+	// Run the server
+	router.Run(":10000")
 }
