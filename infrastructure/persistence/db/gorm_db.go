@@ -1,7 +1,7 @@
 package db
 
 import (
-	"Todo-api-Golang/core/domain/entites"
+	"Todo-api-Golang/core/domain/entities"
 	"log"
 	"os"
 
@@ -22,7 +22,7 @@ func ConnectGormDB() (db *gorm.DB, err error){
 		log.Printf("failed to connect database: %v\n", err);
 	}	
 
-	db.AutoMigrate(&entites.Todo{})
+	db.AutoMigrate(&entities.Todo{})
 
 	log.Println("Connecte to the database!...")
 

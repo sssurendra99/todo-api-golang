@@ -5,17 +5,17 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
-	"Todo-api-Golang/core/domain/entites"
+	entities "Todo-api-Golang/core/domain/entities"
 )
 
 // GetTodos godoc
-// @Summary Get all todos
-// @Description Retrieve all todo items from the database
-// @Tags Todos
-// @Produce json
-// @Success 200 {array} entites.Todo "List of Todo items"
-// @Failure 500 {object} gin.H{"error": "internal server error"}
-// @Router /todos [get]
+//	@Summary		Get all todos
+//	@Description	Retrieve all todo items from the database
+//	@Tags			Todos
+//	@Produce		json
+//	@Success		200	{array}		entities.Todo	"List of Todo items"
+//	@Failure		500	{object}	shared.ResponseError
+//	@Router			/todos [get]
 func GetTodos(c *gin.Context) {
 	// Retrieve the database instance
     db, exists := c.Get("db")
@@ -27,7 +27,7 @@ func GetTodos(c *gin.Context) {
     // Type assert the database
     database := db.(*gorm.DB)
 
-    var todos []entites.Todo
+    var todos []entities.Todo
     if err := database.Find(&todos).Error; err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
         return

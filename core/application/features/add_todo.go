@@ -5,23 +5,25 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
-	"Todo-api-Golang/core/domain/entites"
+	entities "Todo-api-Golang/core/domain/entities"
 )
 
 // AddTodo godoc
-// @Summary Create a new Todo
-// @Description Add a new todo to the database
-// @Tags Todo
-// @Accept json
-// @Produce json
-// @Param todo body entities.Todo true "Todo Model"
-// @Success 201 {object} entities.Todo
-// @Router /todos [post]
+//	@Summary		Create a new Todo
+//	@Description	Add a new todo to the database
+//	@Tags			Todo
+//	@Accept			json
+//	@Produce		json
+//	@Param			todo	body		entities.Todo	true	"Todo Model"
+//	@Success		201		{object}	entities.Todo
+//	@Failure		400		{object}	shared.ResponseError
+//	@Failure		500		{object}	shared.ResponseError
+//	@Router			/todos [post]
 func AddTodo(c *gin.Context) {
 	db, _ := c.Get("db")
     database := db.(*gorm.DB)
 
-    var todo entites.Todo
+    var todo entities.Todo
     if err := c.ShouldBindJSON(&todo); err != nil {
         c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return

@@ -1,7 +1,7 @@
 package extensions
 
 import (
-	_ "Todo-api-Golang/api/docs"
+	
 	"Todo-api-Golang/core/application/features"
 
 	"github.com/gin-gonic/gin"

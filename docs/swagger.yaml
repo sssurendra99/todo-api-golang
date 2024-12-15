@@ -1,0 +1,78 @@
+definitions:
+  entities.Todo:
+    description: A task or to-do item with completion status
+    properties:
+      createdAt:
+        description: "@description\tTimestamp when the Todo was created\n\t@example\t\t\"2024-12-15T12:34:56.789Z\""
+        type: string
+      id:
+        description: "@description\tUnique identifier for the Todo\n\t@example\t\t\"3fcdfe19-0dc6-4b9a-9354-c8b7e0b8a7e5\""
+        type: string
+      isCompleted:
+        description: "@description\tWhether the Todo is completed\n\t@example\t\tfalse"
+        type: boolean
+      name:
+        description: "@description\tName or title of the Todo\n\t@example\t\t\"Buy
+          groceries\""
+        type: string
+      updatedAt:
+        description: "@description\tTimestamp when the Todo was last updated\n\t@example\t\t\"2024-12-15T13:45:56.789Z\""
+        type: string
+    type: object
+  shared.ResponseError:
+    properties:
+      error:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /todos:
+    get:
+      description: Retrieve all todo items from the database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of Todo items
+          schema:
+            items:
+              $ref: '#/definitions/entities.Todo'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/shared.ResponseError'
+      summary: Get all todos
+      tags:
+      - Todos
+    post:
+      consumes:
+      - application/json
+      description: Add a new todo to the database
+      parameters:
+      - description: Todo Model
+        in: body
+        name: todo
+        required: true
+        schema:
+          $ref: '#/definitions/entities.Todo'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/entities.Todo'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/shared.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/shared.ResponseError'
+      summary: Create a new Todo
+      tags:
+      - Todo
+swagger: "2.0"
