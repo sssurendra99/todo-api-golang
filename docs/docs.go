@@ -95,23 +95,27 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "createdAt": {
-                    "description": "@description\tTimestamp when the Todo was created\n\t@example\t\t\"2024-12-15T12:34:56.789Z\"",
+                    "description": "@description The timestamp when the record was created",
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "description": "@description The timestamp when the record was deleted (for soft deletes)",
                     "type": "string"
                 },
                 "id": {
-                    "description": "@description\tUnique identifier for the Todo\n\t@example\t\t\"3fcdfe19-0dc6-4b9a-9354-c8b7e0b8a7e5\"",
+                    "description": "@description Unique identifier for the Todo\n@example \"3fcdfe19-0dc6-4b9a-9354-c8b7e0b8a7e5\"",
                     "type": "string"
                 },
                 "isCompleted": {
-                    "description": "@description\tWhether the Todo is completed\n\t@example\t\tfalse",
+                    "description": "@description Whether the Todo is completed\n@example false",
                     "type": "boolean"
                 },
                 "name": {
-                    "description": "@description\tName or title of the Todo\n\t@example\t\t\"Buy groceries\"",
+                    "description": "@description Name or title of the Todo\n@example \"Buy groceries\"",
                     "type": "string"
                 },
                 "updatedAt": {
-                    "description": "@description\tTimestamp when the Todo was last updated\n\t@example\t\t\"2024-12-15T13:45:56.789Z\"",
+                    "description": "@description The timestamp when the record was last updated",
                     "type": "string"
                 }
             }
